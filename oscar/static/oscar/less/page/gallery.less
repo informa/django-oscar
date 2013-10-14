@@ -1,0 +1,43 @@
+// Product gallery uses Bootstrap accordion if product has more than one image
+
+#product-gallery {
+	height:402px;
+	overflow:hidden;
+}
+
+
+
+.product-main-img {
+  -webkit-transition: height 0.001s;
+  -moz-transition: height 0.001s;
+  -ms-transition: height 0.001s;
+  -o-transition: height 0.001s;
+  transition: height 0.001s;
+  &.collapse {
+  	.opacity(0);
+  }
+  &.collapse.in {
+  	.opacity(100);
+  	.transition(opacity 1s);
+  }
+}
+
+
+
+
+.product-main-img {
+	max-height: 400px!important;
+	.image_container {
+		height:400px;
+		min-height:0;
+		margin-bottom:0;
+		img {
+			max-height: 400px;
+		}
+	}
+
+}
+
+.product-thumb-img {
+
+}

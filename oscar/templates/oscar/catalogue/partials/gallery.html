@@ -2,49 +2,40 @@
 {% load i18n %}
 {% load staticfiles %}
 
-<script id="img-wrapper-tmpl" type="text/x-jquery-tmpl">
-    <div class="rg-image-wrapper">
-        <div class="rg-image-nav">
-            <a href="#" class="rg-image-nav-prev">{% trans "Previous Image" %}</a>
-            <a href="#" class="rg-image-nav-next">{% trans "Next Image" %}</a>
-        </div>
-        <div class="rg-image"></div>
-        <div class="rg-loading"></div>
-        <div class="rg-caption-wrapper">
-            <div class="rg-caption" style="display:none;">
-                <p></p>
-            </div>
-        </div>
-    </div>
-</script>
-
 {% with all_images=product.images.all %}
     {# use length rather then count as the images get queried anyways #}
 
     {% if all_images|length > 1 %}
 
-        <div id="rg-gallery" class="rg-gallery">
-            <div class="rg-thumbs">
-                <!-- Elastislide Carousel Thumbnail Viewer -->
-                <div class="es-carousel-wrapper hidden-phone">
-                    <div class="es-nav">
-                        <span class="es-nav-prev">{% trans "Previous" %}</span>
-                        <span class="es-nav-next">{% trans "Next" %}</span>
+        <div id="product-gallery">
+          <div class="accordion-group">
+                
+                {% for mainimage in all_images %}
+                    <div id="{{ product.get_title|slugify }}-{{ forloop.counter }}" class="product-main-img accordion-body collapse {% if forloop.first %}in{% endif %}">
+                        <div class="image_container">
+                            {% thumbnail mainimage.original "x400" upscale=False as thumb %}
+                            <img src="{% static thumb.url %}" alt="{{ product.get_title }}" />
+                            {% endthumbnail %}
+                        </div>
                     </div>
-                    <div class="es-carousel">
-                        <ul>
-                            {% for image in all_images %}
-                            <li>
-                                {% thumbnail image.original "100x100" upscale=False as thumb %}
-                                <a href="{{ image.original.url }}" rel="lightbox"><img src="{% static thumb.url %}" data-large="{{ image.original.url }}" alt="image02" data-description="{% if image.caption %}{{ image.caption }}{% endif %}" /> </a>
-                                {% endthumbnail %}
-                            </li>
-                            {% endfor %}
-                        </ul>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="product-thumb-img">
+            <ul class="row-fluid">
+                {% for image in all_images %}
+                <li class="span2">
+                    <div class="image_container">
+                        {% thumbnail image.original "100x100" upscale=False as thumb %}
+                        <a href="#{{ product.get_title|slugify }}-{{ forloop.counter }}" class="accordion-toggle" data-toggle="collapse" data-parent="#product-gallery"><img src="{% static thumb.url %}" alt="{{ product.get_title }}" /> </a>
+                        {% endthumbnail %}
                     </div>
-                </div>
-            </div><!-- rg-thumbs -->
-        </div><!-- rg-gallery -->
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
 
     {% else %}
 
